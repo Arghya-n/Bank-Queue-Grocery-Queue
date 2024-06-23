@@ -8,11 +8,13 @@ public class BankQueue {
     private final int maxQueueLength;
     private final Lock lock = new ReentrantLock();
     private final Teller[] tellers;
+    private volatile boolean running;
 
     public BankQueue(int numTellers, int maxQueueLength) {
         this.maxQueueLength = maxQueueLength;
         this.queue = new LinkedList<>();
         this.tellers = new Teller[numTellers];
+        this.running = true;
         for (int i = 0; i < numTellers; i++) {
             tellers[i] = new Teller(this);
             new Thread(tellers[i]).start();
@@ -38,14 +40,22 @@ public class BankQueue {
         try {
             Customer customer = queue.peek();
             if (customer != null && (System.currentTimeMillis() - customer.getQueueEntryTime() > 10)) {
-                queue.poll();
-                customer.setLeft(true);
-                return null;
+                queue.poll(); // Remove the customer from the queue
+                customer.setLeft(true); // Mark the customer as having left
+                return null; // Return null to indicate this customer should not be served
             }
-            return queue.poll();
+            return queue.poll(); // Retrieve and remove the first customer for serving
         } finally {
             lock.unlock();
         }
+    }
+
+    public void stop() {
+        running = false;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }
 
@@ -58,7 +68,7 @@ class Teller implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (bankQueue.isRunning()) {
             Customer customer = bankQueue.getNextCustomer();
             if (customer != null) {
                 if (customer.hasLeft()) {

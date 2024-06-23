@@ -36,6 +36,7 @@ public class QueueSimulator {
         }
 
         printStatistics();
+        bankQueue.stop();
     }
 
     private void printStatistics() {
@@ -43,7 +44,7 @@ public class QueueSimulator {
         int totalCustomers = 0;
         int servedCustomers = 0;
         int leftCustomers = 0;
-
+        int custommersCurrentlyinSystem=0;
         for (Customer customer : customers) {
             totalCustomers++;
             if (customer.isServed()) {
@@ -51,14 +52,18 @@ public class QueueSimulator {
 
                 totalServedTime += customer.getServiceTime();
             }
-            if (customer.hasLeft()) {
+            else if (customer.hasLeft()) {
                 leftCustomers++;
+            }
+            else{
+                custommersCurrentlyinSystem++;
             }
         }
 
         System.out.println("Total customers: " + totalCustomers);
         System.out.println("Customers served: " + servedCustomers);
         System.out.println("Customers left: " + leftCustomers);
+        System.out.println("Customers currently in the system: "+ custommersCurrentlyinSystem);
         System.out.println("Average service time: " + (servedCustomers > 0 ? (totalServedTime / servedCustomers) : 0) + " milliseconds");
     }
 
