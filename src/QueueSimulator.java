@@ -62,9 +62,5 @@ public class QueueSimulator {
         System.out.println("Average service time: " + (servedCustomers > 0 ? (totalServedTime / servedCustomers) : 0) + " milliseconds");
     }
 
-    public static void main(String[] args) {
-        int simulationTime = 10; // 10 seconds
-        QueueSimulator simulator = new QueueSimulator(simulationTime, 3, 10);
-        simulator.simulate();
-    }
+
 }
