@@ -6,12 +6,16 @@ public class Customer {
     private long queueEntryTime;
     private boolean served;
     private boolean left;
+    private boolean inSystem;
+    private boolean inQueue;
 
     public Customer(long arrivalTime) {
         this.arrivalTime = arrivalTime;
         this.serviceTime = ThreadLocalRandom.current().nextInt(5, 11); // 5 to 10 milliseconds
         this.served = false;
         this.left = false;
+        this.inSystem=false;
+        this.inQueue=false;
     }
 
     public long getServiceTime() {
@@ -41,4 +45,19 @@ public class Customer {
     public boolean hasLeft() {
         return left;
     }
+    public void setInSystem(boolean inSystem) {
+        this.inSystem = inSystem ;
+    }
+
+    public boolean isInSystem() {
+        return inSystem;
+    }
+    public void setInQueue(boolean inSystem) {
+        this.inSystem = inSystem ;
+    }
+
+    public boolean isInQueue() {
+        return inSystem;
+    }
+
 }

@@ -45,6 +45,8 @@ public class QueueSimulator {
         int servedCustomers = 0;
         int leftCustomers = 0;
         int custommersCurrentlyinSystem=0;
+        int inQueue=0;
+        int inSystem=0;
         for (Customer customer : customers) {
             totalCustomers++;
             if (customer.isServed()) {
@@ -55,16 +57,20 @@ public class QueueSimulator {
             else if (customer.hasLeft()) {
                 leftCustomers++;
             }
-            else{
-                custommersCurrentlyinSystem++;
+            else if(customer.isInQueue()){
+               inQueue++;
+            }
+            else if(customer.isInSystem()){
+                inSystem++;
             }
         }
 
         System.out.println("Total customers: " + totalCustomers);
         System.out.println("Customers served: " + servedCustomers);
         System.out.println("Customers left: " + leftCustomers);
-        System.out.println("Customers currently in the system: "+ custommersCurrentlyinSystem);
-        System.out.println("Average service time: " + (servedCustomers > 0 ? (totalServedTime / servedCustomers) : 0) + " milliseconds");
+        System.out.println("Customers in the queue: "+ inQueue);
+        System.out.println("Customers in the server: "+ inSystem);
+        System.out.println("Average service time: " + (servedCustomers > 0 ? (totalServedTime *1.00/ servedCustomers) : 0) + " milliseconds");
     }
 
 

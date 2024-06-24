@@ -29,6 +29,7 @@ public class BankQueue {
             }
             customer.setQueueEntryTime(System.currentTimeMillis());
             queue.offer(customer);
+            customer.setInQueue(true);
             return true;
         } finally {
             lock.unlock();
@@ -41,6 +42,7 @@ public class BankQueue {
             Customer customer = queue.peek();
             if (customer != null && (System.currentTimeMillis() - customer.getQueueEntryTime() > 10)) {
                 queue.poll(); // Remove the customer from the queue
+
                 customer.setLeft(true); // Mark the customer as having left
                 return null; // Return null to indicate this customer should not be served
             }
@@ -75,6 +77,7 @@ class Teller implements Runnable {
                     continue;
                 }
                 try {
+                    customer.setInSystem(true);
                     Thread.sleep(customer.getServiceTime());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
